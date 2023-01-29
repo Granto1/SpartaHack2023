@@ -1,4 +1,0 @@
-Ideas:
-Stick - Multiple sensors feed data to app for the blind
-GEMINI - ML for GEMINI Blood Glucose Sensor
-Meme Idea - Amazon Echo wakes you up by listing off your tasks for the day
