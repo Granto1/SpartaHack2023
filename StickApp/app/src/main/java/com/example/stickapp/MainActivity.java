@@ -155,9 +155,21 @@ public class MainActivity extends AppCompatActivity {
             //look for bluetooth device
             try {
                 if (btSocket == null || !mIsBluetoothConnected) { //if either are true, it's a problem
-                    btSocket = hc05.createInsecureRfcommSocketToServiceRecord(mUUID); //search for bluetooth
+
+                    int counter = 0;
+                    do {
+                        try {
+                            btSocket = hc05.createRfcommSocketToServiceRecord(mUUID);
+                            System.out.println(btSocket);
+                            btSocket.connect();
+                            System.out.println(btSocket.isConnected());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        counter++;
+                    } while (!btSocket.isConnected() && counter ＜ 3);
+                    // the while loop above is meant to repeat it however many times to secure the connection
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                    btSocket.connect();
                 }
             } catch (IOException e) {
                 // Unable to connect to device`
@@ -166,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return null;
         } //Look for bluetooth device and connect
+
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
@@ -256,6 +269,8 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
+
         //TextToSpeech sequence and vibration reaction
         public void response(int distance) {
             if (distance < 4) { //if we reach a dangerous position value
