@@ -26,8 +26,21 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.UUID;
 
+package net.bane.bluetoothapplication;
+
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.UUID;
+
 public class MainActivity extends AppCompatActivity {
-    static final UUID mUUID = UUID.fromString("00001101-0000-1000-8000-00805F934FB");
+    static final UUID mUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     TextView txtIsConnected = findViewById(R.id.txtConnected);
     TextView txtData = findViewById(R.id.txtConnected);
     OutputStream outputStream;
@@ -35,6 +48,47 @@ public class MainActivity extends AppCompatActivity {
     BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothDevice hc05 = btAdapter.getRemoteDevice("00:21:13:02:B6:5B");
     BluetoothSocket btSocket = null;
+
+    // establish a connection between the bluetooth module and the android project
+    int counter = 0;
+        do {
+            try {
+                btSocket = hc05.createRfcommSocketToServiceRecord(mUUID);
+                System.out.println(btSocket);
+                btSocket.connect();
+                System.out.println(btSocket.isConnected());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            counter++;
+        } while (!btSocket.isConnected() && counter ＜ 3);
+        // the while loop above is meant to repeat it however many times to secure the connection
+
+// input stream is to hopefully be able to receive something? 
+    InputStream inputStream = null;
+        try {
+            inputStream = btSocket.getInputStream();
+            inputStream.skip(inputStream.available());
+
+            for (int i = 0; i ＜ 26; i++) {
+
+                byte b = (byte) inputStream.read();
+                // THIS LINE BELOW PRINTS OUT SOMETHING, LOOK FOR THIS
+                System.out.println((char) b);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+// this ends the connection between the BLE module and the android phone. I'd recommend putting this later when the application is exited or something, but I don't know much about android studio
+        try {
+            btSocket.close();
+            System.out.println(btSocket.isConnected());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     private ReadInput mReadThread = null;
     boolean mIsBluetoothConnected = false;
 
