@@ -1,5 +1,5 @@
 # SpartaHack2023
-Code for SpartaHack2023 Competition from students of Dow High School
+Code for SpartaHack2023 Competition from students of Dow High School (3rd Place Finish)
 
 Arduino code for Wireless Walker
 
@@ -8,8 +8,6 @@ App for wireless control initially started with Android Studio, before issues in
 Java visualization for data mapping
 
 Thanks for checking out our project!
-
-Edit: We took third place! 
 
 Devpost Entry:
 https://devpost.com/software/wireless-walker?ref_content=my-projects-tab&ref_feature=my_projects
